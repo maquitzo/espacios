@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+    backend:
+        image: api
+        container_name: api
+        build:
+            context: ./api
+        ports:
+            - "9000:80"
+        networks:
+            - backend-mysql
+        depends_on:
+            - mysqldb
+
+    frontend:
+        image: ui
+        container_name: ui
+        build:
+            context: ./ui
+        ports:
+            - "9001:80"
+        depends_on:
+            - backend
+
+    mysqldb:
+        image: mysql:8
+        networks:
+        - backend-mysql
+        environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=bootdb     
+
+networks:
+  backend-mysql: 
